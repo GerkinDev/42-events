@@ -16,9 +16,9 @@ module.exports = function OAuth2QueryTransformer(config){
             };
             const expiresIn = _.get(authInfos, 'response.expires_in');
 
-            authInfos.expirationDate = new Date();
-            authInfos.expirationDate.setSeconds(authInfos.expirationDate.getSeconds() + expiresIn);
-            if(_.isNumber(expiresIn)){
+            if(_.isNumber(expiresIn)){//mais si personne ne se sert du serveur il n'est pas necessaire de se re-auth
+                authInfos.expirationDate = new Date();
+                authInfos.expirationDate.setSeconds(authInfos.expirationDate.getSeconds() + expiresIn);
                 setTimeout(() => this.emit('authenticate', url, params), expiresIn * 1000);
             }
         },
